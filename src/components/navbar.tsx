@@ -16,46 +16,40 @@ const Navbar = async () => {
   });
 
   return (
-    <nav className="h-16 border-b bg-background">
-      <div className="mx-auto flex h-full max-w-(--breakpoint-xl) items-center justify-between px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 h-20 border-b border-border bg-background/95 backdrop-blur">
+      <div className="mx-auto flex h-full max-w-(--breakpoint-xl) items-center justify-between gap-6 px-6 sm:px-8">
         <Logo />
 
         {/* Desktop Menu */}
         <NavMenu className="hidden md:block" />
 
-        <Link href="/cart">
-          <Badge className="p-2 text-md">
-            <ShoppingBasket /> <CountCartItem /> ชิ้น
-          </Badge>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/cart" className="group">
+            <Badge variant="outline" className="gap-2 px-3">
+              <ShoppingBasket className="size-3.5!" />
+              <CountCartItem /> ชิ้น
+            </Badge>
+          </Link>
 
-        <div className="flex items-center gap-3">
-          
-          {
-            !session && (
-              <>
-                <Button asChild className="hidden sm:inline-flex" variant="outline">
-                  <Link href="/login">เข้าสู่ระบบ</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/signup">สมัครสมาชิก</Link>
-                </Button>
-              </>
-            )
-          }
+          {!session && (
+            <>
+              <Button asChild className="hidden sm:inline-flex" variant="outline" size="sm">
+                <Link href="/login">เข้าสู่ระบบ</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link href="/signup">สมัครสมาชิก</Link>
+              </Button>
+            </>
+          )}
 
-          {
-            session && (
-              <>
-                <div className="flex items-center mr-4">
-                  สวัสดี, {session.user.name}
-                </div>
-                <div>
-                  <LogoutButton />
-                </div>
-              </>
-            )
-          }
+          {session && (
+            <>
+              <span className="hidden text-caption text-muted-foreground sm:inline">
+                สวัสดี, {session.user.name}
+              </span>
+              <LogoutButton />
+            </>
+          )}
 
           {/* Mobile Menu */}
           <div className="md:hidden">

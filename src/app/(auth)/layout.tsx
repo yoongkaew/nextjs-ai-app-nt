@@ -1,22 +1,51 @@
 import type { Metadata } from "next";
-import { Prompt, Roboto, Lora } from "next/font/google";
+import {
+  EB_Garamond,
+  Manrope,
+  JetBrains_Mono,
+  Noto_Sans_Thai,
+  Noto_Serif_Thai,
+} from "next/font/google";
 import { cn } from "@/lib/utils";
 import "../globals.css";
 
-const loraHeading = Lora({subsets:['latin'],variable:'--font-heading'});
-
-const roboto = Roboto({subsets:['latin'],variable:'--font-sans'});
-
-export const promptFont = Prompt({
-  weight: ['400', '500', '700'],
-  subsets: ['thai'],
-  display: 'swap'
+// Same TypeGallery type pairing as the storefront.
+const ebGaramond = EB_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-eb-garamond",
+  display: "swap",
 });
 
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+
+const notoSansThai = Noto_Sans_Thai({
+  subsets: ["thai"],
+  variable: "--font-noto-thai",
+  display: "swap",
+});
+
+const notoSerifThai = Noto_Serif_Thai({
+  subsets: ["thai"],
+  variable: "--font-noto-serif-thai",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "ระบบ ล็อกอิน",
-  description: "เรียนรู้การเขียน Nex.tjs",
+  title: "TypeGallery — เข้าสู่ระบบ",
+  description: "Editorial, typography-forward storefront",
 };
 
 export default function AuthLayout({
@@ -27,11 +56,16 @@ export default function AuthLayout({
   return (
     <html
       lang="th"
-      className={cn(promptFont.className, "font-sans", roboto.variable, loraHeading.variable)}
+      className={cn(
+        ebGaramond.variable,
+        manrope.variable,
+        jetbrainsMono.variable,
+        notoSansThai.variable,
+        notoSerifThai.variable,
+        "font-sans"
+      )}
     >
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
