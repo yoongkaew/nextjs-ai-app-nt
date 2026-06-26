@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // standalone output สำหรับ Docker multi-stage build (.next/standalone)
+  output: "standalone",
   cacheComponents: true,
   images: {
     remotePatterns: [

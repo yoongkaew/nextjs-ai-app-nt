@@ -2,6 +2,7 @@
 // Service layer for the admin dashboard (Prisma / MariaDB).
 // All Decimal values are converted to number here so results are safe to
 // pass across the Server -> Client component boundary.
+import { connection } from "next/server";
 import prisma from "@/lib/prisma";
 
 export type OrderStatus = "delivered" | "received" | "processing";
@@ -45,6 +46,10 @@ export type AdminOrderRow = {
  * five independent queries run concurrently via Promise.all.
  */
 export async function getDashboardStats(): Promise<DashboardStats> {
+  // ข้อมูลแอดมินเป็น dynamic ต่อ request — หยุด prerender ก่อนแตะ DB
+  // (cacheComponents เปิดอยู่ จึงต้องบอก Next.js ผ่าน connection())
+  await connection();
+
   const [productCount, orderCount, customerCount, revenue, statusGroups] =
     await Promise.all([
       prisma.products.count(),
@@ -79,6 +84,8 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
 /** Most recent orders for the dashboard activity feed. */
 export async function getRecentOrders(limit = 5): Promise<RecentOrder[]> {
+  await connection();
+
   const orders = await prisma.orders.findMany({
     take: limit,
     orderBy: { date: "desc" },
@@ -102,6 +109,8 @@ export async function getRecentOrders(limit = 5): Promise<RecentOrder[]> {
 
 /** Full product list for the management table. */
 export async function getAdminProducts(): Promise<AdminProductRow[]> {
+  await connection();
+
   const products = await prisma.products.findMany({
     orderBy: { id: "asc" },
     select: {
@@ -124,6 +133,8 @@ export async function getAdminProducts(): Promise<AdminProductRow[]> {
 
 /** Full order list for the management table. */
 export async function getAdminOrders(): Promise<AdminOrderRow[]> {
+  await connection();
+
   const orders = await prisma.orders.findMany({
     orderBy: { date: "desc" },
     select: {

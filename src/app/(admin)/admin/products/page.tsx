@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import {
   Table,
   TableBody,
@@ -15,9 +16,7 @@ export const metadata: Metadata = {
   title: "สินค้า — แผงควบคุมผู้ดูแล",
 };
 
-export default async function AdminProductsPage() {
-  const products = await getAdminProducts();
-
+export default function AdminProductsPage() {
   return (
     <div className="flex flex-col gap-6">
       <header className="flex items-end justify-between gap-4">
@@ -25,11 +24,25 @@ export default async function AdminProductsPage() {
           <h1 className="font-heading text-3xl tracking-tight text-primary">
             สินค้า
           </h1>
-          <p className="text-muted-foreground mt-1 text-sm">
-            ทั้งหมด {formatNumber(products.length)} รายการ
-          </p>
         </div>
       </header>
+
+      {/* ข้อมูลจาก DB เป็น dynamic (cacheComponents) จึงต้องอยู่ใน Suspense */}
+      <Suspense fallback={<ProductsSkeleton />}>
+        <ProductsSection />
+      </Suspense>
+    </div>
+  );
+}
+
+async function ProductsSection() {
+  const products = await getAdminProducts();
+
+  return (
+    <>
+      <p className="text-muted-foreground text-sm">
+        ทั้งหมด {formatNumber(products.length)} รายการ
+      </p>
 
       <div className="border border-border bg-card">
         <Table>
@@ -74,6 +87,14 @@ export default async function AdminProductsPage() {
           </TableBody>
         </Table>
       </div>
+    </>
+  );
+}
+
+function ProductsSkeleton() {
+  return (
+    <div className="border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+      กำลังโหลดสินค้า…
     </div>
   );
 }
