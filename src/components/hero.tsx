@@ -28,9 +28,10 @@ export default function Hero() {
               <Link href="/product">
                 เลือกซื้อสินค้า <ArrowUpRight className="size-5!" />
               </Link>
+              
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="/course">ดูคอร์สเรียน</Link>
+              <Link href="/course">ดูคอร์สเรียนเทรดหุ้น</Link>
             </Button>
           </div>
         </div>
