@@ -6,15 +6,21 @@ import { Button } from "@/components/ui/button";
 // http://localhost:3000/about
 
 async function ApiVersion() {
+  let version: string | null = null;
   try {
     const response = await fetch("https://api.codingthailand.com/api/version", {
       next: { revalidate: 3600 },
     });
     const apiInfo = await response.json();
-    return <span className="text-foreground">v{apiInfo.data.version}</span>;
+    version = apiInfo.data.version;
   } catch {
+    version = null;
+  }
+
+  if (version === null) {
     return <span className="text-muted-foreground">unavailable</span>;
   }
+  return <span className="text-foreground">v{version}</span>;
 }
 
 const principles = [
